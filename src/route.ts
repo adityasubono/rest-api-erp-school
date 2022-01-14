@@ -1,4 +1,6 @@
 import { Express, Request, Response } from "express";
+import * as path from 'path';
+
 import {
     createPostHandler,
     updatePostHandler,
@@ -23,30 +25,40 @@ import {
 } from "./schema/post.schema";
 
 export default function (app: Express) {
+    // Home Index
+    app.get("/", (req: Request, res: Response) => res.sendFile(path.join(__dirname, '../dist/index.html')));
+
     app.get("/healthcheck", (req: Request, res: Response) => res.sendStatus(200));
 
     // Register user
-    app.post("/api/users", validateRequest(createUserSchema), createUserHandler);
+    app.post("/api/users",
+        validateRequest(createUserSchema),
+        createUserHandler
+    );
 
     // Login
-    app.post(
-        "/api/sessions",
+    app.post("/api/sessions",
         validateRequest(createUserSessionSchema),
         createUserSessionHandler
     );
 
     // Get the user's sessions
-    app.get("/api/sessions", requiresUser, getUserSessionsHandler);
+    app.get("/api/sessions",
+        requiresUser,
+        getUserSessionsHandler
+    );
 
     // Logout
-    app.delete("/api/sessions", requiresUser, invalidateUserSessionHandler);
+    app.delete("/api/sessions",
+        requiresUser,
+        invalidateUserSessionHandler
+    );
 
     // Create a post
     app.post(
         "/api/posts",
         [requiresUser, validateRequest(createPostSchema)],
-        createPostHandler
-    );
+        createPostHandler);
 
     // Update a post
     app.put(

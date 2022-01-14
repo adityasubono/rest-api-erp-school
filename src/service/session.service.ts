@@ -1,8 +1,8 @@
 import {LeanDocument, FilterQuery, UpdateQuery} from "mongoose";
 import config from "config";
 import {get} from "lodash";
-import {UserDocument} from "../model/user.model";
-import Session, {SessionDocument} from "../model/session.model";
+import {UserDocument} from "../models/user.model";
+import Session, {SessionDocument} from "../models/session.model";
 import {sign, decode} from "../utils/jwt.utils";
 import {findUser} from "./user.service";
 
@@ -12,16 +12,9 @@ export async function createSession(userId: string, userAgent: string) {
     return session.toJSON();
 }
 
-export function createAccessToken({
-                                      user,
-                                      session,
-                                  }: {
-    user:
-        | Omit<UserDocument, "password">
-            | LeanDocument<Omit<UserDocument, "password">>;
-    session:
-        | Omit<SessionDocument, "password">
-            | LeanDocument<Omit<SessionDocument, "password">>;
+export function createAccessToken({user, session }: {
+    user: | Omit<UserDocument, "password"> | LeanDocument<Omit<UserDocument, "password">>;
+    session: | Omit<SessionDocument, "password"> | LeanDocument<Omit<SessionDocument, "password">>;
 }) {
     // Build and return the new access token
     const accessToken = sign(

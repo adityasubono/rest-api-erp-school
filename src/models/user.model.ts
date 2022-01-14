@@ -6,6 +6,8 @@ export interface UserDocument extends mongoose.Document {
     email: string;
     name: string;
     password: string;
+    role: string;
+    img: string;
     createdAt: Date;
     updatedAt: Date;
 
@@ -26,6 +28,15 @@ const UserSchema = new mongoose.Schema(
         password: {
             type: String,
             required: true,
+        },
+        role: {
+            type: String,
+            enum: ['SUPER_ADMIN', 'ADMIN', 'PRINCIPAL', 'TEACHER', 'SPLECIALIST-TEACHER', 'FINANCE-MANAGER', 'TRANSPORT-MANAGER', 'PARENT', 'COUNSELLOR', 'STUDENT'],
+            required: true
+        },
+        img: {
+            type: String,
+            required: false
         },
     },
     {
@@ -51,14 +62,10 @@ UserSchema.pre("save", async function (next: mongoose.HookNextFunction) {
 });
 
 // Used for logging in
-UserSchema.methods.comparePassword = async function (
-    candidatePassword: string
-) {
+UserSchema.methods.comparePassword = async function (candidatePassword: string) {
     const user = this as UserDocument;
-
     return bcrypt.compare(candidatePassword, user.password).catch((e) => false);
 };
-
 const User = mongoose.model<UserDocument>("User", UserSchema);
 
 export default User;

@@ -9,10 +9,12 @@ import {
 
 export async function createPostHandler(req: Request, res: Response) {
     const userId = get(req, "user._id");
+    // @ts-ignore
     const body = req.body;
 
     const post = await createPost({ ...body, user: userId });
 
+    // @ts-ignore
     return res.send(post);
 }
 

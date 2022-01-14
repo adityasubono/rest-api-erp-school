@@ -2,16 +2,16 @@ import { object, string } from "yup";
 
 const payload = {
     body: object({
-        title: string().required("Title is required"),
+        title: string().required("Title Sangat Dibutuhkan"),
         body: string()
-            .required("Body is required")
-            .min(120, "Body is too short - should be 120 chars minimum."),
+            .required("Isi Text Sangat Dibutuhkan")
+            .min(120, "Isian Text Sangat Pendek - Minimal 120 Karakter"),
     }),
 };
 
 const params = {
     params: object({
-        postId: string().required("postId is required"),
+        postId: string().required("postId sangat dibutuhkan"),
     }),
 };
 
